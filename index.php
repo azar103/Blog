@@ -79,16 +79,32 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
     <?php }   ?>
     <h1 id="title">Liste des episodes</h1>
    <?php
+   //pagination
+   $chapterPerPages = 3;
+   $total_data = $db->query('SELECT COUNT(*)  AS total FROM chapter')->fetch();
+   $total = $total_data['total'];
+   $numberOfPages =ceil($total/$chapterPerPages);
 
-     $response = $db->query('SELECT id, title, content, DATE_FORMAT(created_at ,\'%d/%m/%Y à %Hh%imin%ss\') AS date FROM chapter ORDER BY date DESC');
+   $actualPage = 0;
+   if(isset($_GET['page'])){
+       $actualPage = intval($_GET['page']);
+       if($actualPage>$numberOfPages) {
+           $actualPage = $numberOfPages;
+       }
+   }else{
+       $actualPage = 1;
+   }
+
+   $firstEnter = ($actualPage-1)*$chapterPerPages;
+     $response = $db->query('SELECT id, title, content, DATE_FORMAT(created_at ,"%d/%m/%Y à %Hh%imin%ss") AS date FROM chapter ORDER BY date DESC  LIMIT '.$firstEnter.', '.$chapterPerPages);
      while ($data = $response->fetch())
    {
    ?>
-       <article>
-       <h1><?php echo $data['title'] ?> </h1><i id="date">Publié le <?php echo $data['date'] ?></i> <br>
-           <p>
+       <article class="row">
+       <h1 class="col-xs-12"><?php echo $data['title'] ?> </h1><i class="col-xs-12" id="date">Publié le <?php echo $data['date'] ?></i> <br>
+           <p class="col-xs-12">
                <?php
-               $str = htmlspecialchars_decode(stripslashes($data['content']));
+               $str = html_entity_decode($data['content']);
                echo cutString(100, $str);
                ?>
            </p>
@@ -102,22 +118,39 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
 
            } else {
                ?>
-
+              <div class="col-xs-12">
                <a href="episode.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
 
                <a href="editChapter.php?id=<?php echo $data['id'] ?>"> <button class="btn btn-primary">Modifier <i class="fa fa-edit"></i></button></a>
                <a href="index.php?action=delete&id=<?php echo $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
-
+              </div>
    </article>
                <?php
            }
 
+
+
    }
+
+     ?>
+       <div class="text-center">
+       <div class="btn-group">
+       <?php
+     for ($i=1;$i<=$numberOfPages;$i++){
+         ?>
+
+           <a href="index.php?page=<?php echo $i ?>"><button  class="btn btn-primary "><?php echo $i ?></button> </a>
+
+
+       <?php
+
+     }
+  ?>
+       </div>
+       </div>
+  <?php
    $response->closeCursor();
    ?>
-
-
-
 
    </div>
    </div>
