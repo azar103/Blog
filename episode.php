@@ -18,8 +18,11 @@
                        $data = $req->fetch();
                    ?>
                    <h2 class="col-xs-12"><?php echo  $data['title'];?> <i>Publié le <?php echo $data['date'] ?></i></h2>
-                   <hr size="30">
-                   <p class="col-xs-12"><?php echo  $data['content']; ?></p><br>
+
+                   <div class="container">
+                       <p class="col-xs-12"><?php echo  $data['content']; ?></p><br>
+                   </div>
+
 
                </div>
 

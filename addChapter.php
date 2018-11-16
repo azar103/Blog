@@ -9,10 +9,9 @@
     <script src="tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
-            selector: '#myTextArea'
+            selector: '#myTextArea',
+            content_css : 'mycontent.css'
         });
-
-
     </script>
 </head>
 <body>

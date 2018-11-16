@@ -37,6 +37,12 @@ h2.alert{
     padding: 35px;
     text-align: center;
 }
+p{
+    margin-top: 10px;
+}
+.container > p{
+    padding: 10px;
+}
 #header-photo{
    background-image: url('https://i.pinimg.com/originals/4e/5d/ad/4e5dad42623fce99caaf8f4e70cdc084.png');
    margin: 15px;
@@ -183,6 +189,7 @@ code {
     margin-bottom: 5px;
 
 }
+
 .erreur{
     color: #FF6347;
     font-weight: bold;
