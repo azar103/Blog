@@ -111,9 +111,10 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
            <?php
            if (!isset($_SESSION['id']) && !isset($_SESSION['login'])) {
                ?>
-                 <button class="btn btn-primary">Lire en details
-                       >>
-                   </button>
+                 <div class="col-xs-12">
+               <a href="episode.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
+                 </div>
+               </article>
                <?php
 
            } else {
@@ -133,19 +134,7 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
    }
 
      ?>
-       <div class="text-center">
-       <div class="btn-group">
-       <?php
-     for ($i=1;$i<=$numberOfPages;$i++){
-         ?>
 
-           <a href="index.php?page=<?php echo $i ?>"><button  class="btn btn-primary "><?php echo $i ?></button> </a>
-
-
-       <?php
-
-     }
-  ?>
        </div>
        </div>
   <?php
@@ -153,6 +142,19 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
    ?>
 
    </div>
+   <div class="text-center">
+       <div class="btn-group">
+           <?php
+           for ($i=1;$i<=$numberOfPages;$i++){
+               ?>
+
+               <a href="index.php?page=<?php echo $i ?>"><button  class="btn btn-primary "><?php echo $i ?></button> </a>
+
+
+               <?php
+
+           }
+           ?>
    </div>
 
 

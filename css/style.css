@@ -8,6 +8,7 @@ body
 #btn-add{
     margin-top: 12px;
 }
+
 .footer {
     width: 100%;
     height: 150px;
@@ -25,6 +26,10 @@ p{
 }
 #date{
     color: #778899;
+}
+input #pseudo-comment{
+    width: 1200px  !important;
+    margin-bottom: 10px  !important;
 }
 hr{
     color: #778899;
@@ -172,21 +177,32 @@ code {
         opacity: 0.5
     }
 }
-.well{
+.well {
     background-color: #70B2AB;
     position: relative;
     top: 50px;
-    padding: 30px;
+    padding: 40px;
     color: white;
     margin: auto;
     line-height: 30px;
     position: relative;
 
+}
+#wrapper{
+    background-color: rgb(22, 105, 173);
+    padding: 38px;
+    position: relative;
 
 }
+#wrapper p{
+    position: absolute;
+    top: 0px;
+    left: 0;
+}
 
-.well input{
-    margin-bottom: 5px;
+.well .col-xs-12 p{
+    font-weight: bold;
+    color: white;
 
 }
 
@@ -203,6 +219,16 @@ color: white;
 .alert .alert-danger ul {
     list-style: none;
 }
+form #content-comment{
+       margin-top: 10px;
+   }
+form input{
+    margin-top: 10px;
+}
+form .container .well{
+    background-color: lightslategrey;
+}
+
 /* media query */
 @media (max-width: 954px){
 html {
