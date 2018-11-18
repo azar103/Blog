@@ -11,7 +11,30 @@
       <?php  require('connectToDb.php') ?>
 
            <div class="container">
+               <!-- pagination -->
+               <?php
+               if(!empty($_POST)) {
+                   $errors = array();
+                   if (empty($_POST['login'])) {
+                       $errors['login'] = "le pseudo n'est pas valide ";
+                   }
+                   if (empty($_POST['content'])) {
+                       $errors['content'] = "le contenu n'est pas valide ";
+                   }
+                   if (empty($errors)) {
+                       if(isset($_POST['login']) && isset($_POST['content'])) {
+                           if (!empty($_POST['login']) && !empty($_POST['content'])) {
+                               $req = $db->prepare('INSERT INTO comments(chapter_id, pseudo, comment, created_at) VALUES(?,? , ? , NOW() )');
+                               $req->execute(array($_GET["id"], $_POST["login"], $_POST["content"]));
+                               header('location:episode.php?id='.$_GET['id']);
+                               $req->closeCursor();
+                               exit();
+                           }
+                       }
+                   }
+               }
 
+               ?>
                <div id="article">
 
                    <?php
@@ -24,7 +47,8 @@
                    <?php
                    //pagination
                    $commentsPerPages = 5;
-                   $total_data = $db->query('SELECT COUNT(*)  AS total FROM comments')->fetch();
+                       $total_data = $db->query('SELECT COUNT(*)  AS total FROM comments WHERE chapter_id = '.$_GET['id'])->fetch();
+
                    $total = $total_data['total'];
                    $numberOfPages =ceil($total/$commentsPerPages);
 
@@ -40,11 +64,25 @@
 
                    $firstEnter = ($actualPage-1)*$commentsPerPages;
                    ?>
-                   <h2 class="col-xs-12"><?php echo  $data['title'];?> <i>Publié le <?php echo $data['date'] ?></i></h2>
+                   <?php if (isset($_GET['action'])){
+                       ?>
+                       <h2 class="alert alert-info">
+                           Votre signalement a été pris en compte.
+                       </h2>
+                   <?php
+                   } ?>
+                   <!--suppresion des commentaires -->
+                    <?php
+                    if(isset($_GET['commentId'])){
+                        $req= $db->prepare('DELETE FROM comments WHERE id = ?')->execute(array($_GET['commentId']));
+                    }
+
+                    ?>
+                   <h2 class="row"><?php echo  $data['title'];?> <i>Publié le <?php echo $data['date'] ?></i></h2>
 
                    <div class="container">
-                       <p class="col-xs-12"><?php echo  $data['content']; ?></p><br>
-                       <div class="col-xs-12">
+                       <p class="content"><?php echo  $data['content']; ?></p><br>
+                       <div >
                            <h2>Ecrire un commentaire</h2>
 
                            <form method="POST" action="">
@@ -55,47 +93,40 @@
 
                        </div>
 
-                       <div class="col-xs-12">
+                       <div >
                              <h2>Lire les Commentaires</h2>
 
                            <div class="container">
                                <?php
-                               $req = $db->prepare('SELECT pseudo,chapter_id ,comment, DATE_FORMAT(created_at ,"%d/%m/%Y à %Hh%imin%ss") AS date FROM comments WHERE chapter_id= ? ORDER BY date DESC LIMIT '.$firstEnter.', '.$commentsPerPages);
+                               $req = $db->prepare('SELECT id,pseudo,chapter_id ,comment, DATE_FORMAT(created_at ,"%d/%m/%Y à %Hh%imin%ss") AS date FROM comments WHERE chapter_id= ? ORDER BY date DESC LIMIT '.$firstEnter.', '.$commentsPerPages);
                                   $req->execute(array($_GET['id']));
                                while($data=$req->fetch()){
                                ?>
                                <div class="row">
-                                    <?php echo $data['pseudo'] ?>-le <?php echo $data['date'] ?>
+                                   <p ><strong><?php echo $data['pseudo'] ?>-le <?php echo $data['date'] ?> </strong> </p>
                                    <p id="title"><?php echo $data['comment'] ?></p>
+                                   <?php
+                                   if(!isset($_SESSION['id']) && !isset($_SESSION['login'])){ ?>
+                                       <p><a id="link_signal"
+                                             href="episode.php?id=<?php echo $_GET['id'] ?>&page=<?php echo $actualPage ?>&action=signal">Signaler</a>
+                                       </p>
+                                       <?php
+                                       }else {
+                                       ?>
+                                       <p><a
+                                             href="episode.php?id=<?php echo $_GET['id'] ?>&page=<?php echo $actualPage ?>&commentId=<?php echo $data['id'] ?>"><button class="btn btn-danger">Supprimer</button> </a>
+                                       </p>
+                                       <?php
+                                   }
+                                   ?>
                                </div>
-                               <?php }  ?>
+                               <?php }
+                               $req->closeCursor();
+                               ?>
 
                            </div>
                        </div>
-                       <?php
-                       $req->closeCursor();
 
-                       if(!empty($_POST)) {
-                           $errors = array();
-                           if (empty($_POST['login'])) {
-                               $errors['login'] = "le pseudo n'est pas valide ";
-                           }
-                           if (empty($_POST['content'])) {
-                               $errors['content'] = "le contenu n'est pas valide ";
-                           }
-                           if (empty($errors)) {
-                               if(isset($_POST['login']) && isset($_POST['content'])) {
-                                   if (!empty($_POST['login']) && !empty($_POST['content'])) {
-                                       $req = $db->prepare('INSERT INTO comments(chapter_id, pseudo, comment, created_at) VALUES(?,? , ? , NOW() )');
-                                       $req->execute(array($_GET["id"], $_POST["login"], $_POST["content"]));
-                                       $req->closeCursor();
-                                       header('location: episode.php?id='.$_GET['id']);
-                                   }
-                               }
-                           }
-                       }
-
-                       ?>
 
 
                    </div>

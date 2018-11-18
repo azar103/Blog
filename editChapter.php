@@ -9,8 +9,8 @@
     <script src="tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
-           selector: '#myTextArea',
-            entity_encoding : "raw"
+            mode: "exact",
+           selector: '#myTextArea'
         });
     </script>
 </head>
@@ -39,7 +39,7 @@
                 if (isset($_POST['title']) && isset($_POST['content'])) {
                     if (!empty($_POST['title']) && !empty($_POST['content'])) {
                         $request = $db->prepare('UPDATE chapter set title = ?, content = ? where id = ?');
-                        $request->execute(array($_POST['title'], strip_tags($_POST['content']), $_GET['id']));
+                        $request->execute(array($_POST['title'], html_entity_decode($_POST['content']), $_GET['id']));
                         $request->closeCursor();
                         header('location: index.php?actionEdit');
                         exit();
@@ -77,7 +77,7 @@
 
         <div class="col-xs-12">
             <h2>Contenu</h2>
-            <textarea name="content" id="myTextArea" ><?php echo $data['content'] ?></textarea>
+            <textarea name="content" id="myTextArea" ><?php echo $data['content']?></textarea>
         </div>
         <div class="col-xs-12 ">
             <input type="submit" class="btn btn-primary btn-lg" id="btn-add" value="Valider">

@@ -32,7 +32,6 @@
 
      }
 
-
  }
  if(isset($_GET['actionEdit'])){
      ?>
@@ -101,10 +100,10 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
    {
    ?>
        <article class="row">
-       <h1 class="col-xs-12"><?php echo $data['title'] ?> </h1><i class="col-xs-12" id="date">Publié le <?php echo $data['date'] ?></i> <br>
+      <p></p> <h1 class="col-xs-12"><?php echo $data['title'] ?> </h1><i class="col-xs-12" id="date">Publié le <?php echo $data['date'] ?></i> <br>
            <p class="col-xs-12">
                <?php
-               $str = html_entity_decode($data['content']);
+               $str = strip_tags($data['content']);
                echo cutString(100, $str);
                ?>
            </p>

@@ -9,8 +9,9 @@
     <script src="tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
+            mode: "exact",
             selector: '#myTextArea',
-            content_css : 'mycontent.css'
+
         });
     </script>
 </head>
@@ -46,7 +47,7 @@
                 if (isset($_POST['title']) && isset($_POST['content'])) {
                     if (!empty($_POST['title']) && !empty($_POST['content'])) {
                         $request = $db->prepare('INSERT INTO chapter(title, content, created_at) VALUES (?, ?, NOW())');
-                        $request->execute(array($_POST['title'], $_POST['content']));
+                        $request->execute(array($_POST['title'], html_entity_decode($_POST['content'])));
                         header('location: index.php');
                         $request->closeCursor();
                         exit();
@@ -67,7 +68,6 @@
                 </ul>
 
             <?php   } ?>
-
 
         </div>
         <?php

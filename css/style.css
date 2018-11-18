@@ -102,6 +102,9 @@ html {
     padding: 15px;
 
 }
+#link_signal{
+    color: #FF6347;
+}
 button {
     max-width: 300px;
 }
@@ -228,7 +231,12 @@ form input{
 form .container .well{
     background-color: lightslategrey;
 }
-
+.content{
+    box-sizing: border-box; margin: 0px 0px 10px; color: #333333;
+    font-family: timbra_sansregular, Arial, sans-serif;
+    font-size: 25.48px;
+    text-align: justify; background-color: #f0f2f1;
+}
 /* media query */
 @media (max-width: 954px){
 html {
