@@ -13,7 +13,14 @@ if(!empty($_POST)) {
     if (empty($errors)) {
         if(isset($_POST['login']) && isset($_POST['content'])) {
             if (!empty($_POST['login']) && !empty($_POST['content'])) {
-                $req = $db->prepare('INSERT INTO comments(chapter_id, pseudo, comment, created_at) VALUES(?,? , ? , NOW() )');
+                if (!isset($_SESSION['id']) && !isset($_SESSION['login']) ) {
+                    $req = $db->prepare('INSERT INTO comments(chapter_id, pseudo, comment, created_at) VALUES(?,? , ? , NOW() )');
+                    $req->execute(array($_GET["id"], $_POST["login"], $_POST["content"]));
+                }else{
+                    $req = $db->prepare('INSERT INTO comments(chapter_id, pseudo, comment, created_at) VALUES(?,\'jean\' , ? , NOW() )');
+                    $req->execute(array($_GET["id"], $_POST["content"]));
+
+                }
                 $req->execute(array($_GET["id"], $_POST["login"], $_POST["content"]));
                 header('location:episode.php?id='.$_GET['id']);
                 $req->closeCursor();
@@ -58,6 +65,8 @@ $req->execute(array($_GET['id']));
 ?>
 
 
+
+
 <!--Affichage -->
 <html>
 <head>
@@ -88,7 +97,9 @@ $req->execute(array($_GET['id']));
                 <h2>Ecrire un commentaire</h2>
 
                 <form method="POST" action="">
-                    <input id="pseudo-comment" type="text" name="login" placeholder="Entrez votre pseudo...">
+
+                    <input id="pseudo-comment" type="text" name="login" placeholder="Entrez votre pseudo..."
+               >
                     <textarea id="content-comment" name="content" cols="50" rows="5" class="form-control" placeholder="Entrez un commentaire..." ></textarea>
                     <input type="submit" class="btn btn-primary">
                 </form>
@@ -104,7 +115,7 @@ $req->execute(array($_GET['id']));
                     while($data=$req->fetch()){
                         ?>
                         <div class="row">
-                            <p ><strong><?php echo $data['pseudo'] ?>-le <?php echo $data['date'] ?> </strong> </p>
+                            <p ><strong><?php echo $data['pseudo'] ?>- le <?php echo $data['date'] ?> </strong> </p>
                             <p id="title"><?php echo $data['comment'] ?></p>
                             <?php
                             if(!isset($_SESSION['id']) && !isset($_SESSION['login'])){ ?>
@@ -114,8 +125,7 @@ $req->execute(array($_GET['id']));
                                 <?php
                             }else {
                                 ?>
-                                <p><a
-                                            href="episode.php?id=<?php echo $_GET['id'] ?>&page=<?php echo $actualPage ?>&commentId=<?php echo $data['id'] ?>"><button class="btn btn-danger">Supprimer</button> </a>
+                                <p><a href="episode.php?id=<?php echo $_GET['id'] ?>&page=<?php echo $actualPage ?>&commentId=<?php echo $data['id'] ?>"><button class="btn btn-danger">Supprimer</button> </a>
                                 </p>
                                 <?php
                             }

@@ -10,7 +10,7 @@ session_start();
 
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="index.php">Accueil</a>
+                    <a href="home.php">Accueil</a>
                 </li>
                 <li>
                     <a href="#main">Liste des episodes</a>

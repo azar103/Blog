@@ -11,5 +11,5 @@ $req = $db->prepare('DELETE FROM chapter WHERE id = ?')
           ->execute(array($_GET['id']));
 
 
-header('location: index.php');
+header('location: home.php');
 exit();

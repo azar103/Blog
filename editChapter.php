@@ -20,7 +20,7 @@ if(!empty($_POST)) {
                 $request = $db->prepare('UPDATE chapter set title = ?, content = ? where id = ?');
                 $request->execute(array($_POST['title'], html_entity_decode($_POST['content']), $_GET['id']));
                 $request->closeCursor();
-                header('location: index.php?actionEdit');
+                header('location: home.php?actionEdit');
                 exit();
             }
         }
