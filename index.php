@@ -1,3 +1,26 @@
+<!-- Recupération des Données-->
+<?php
+require ('connectToDb.php');
+$chapterPerPages = 3;
+$total_data = $db->query('SELECT COUNT(*)  AS total FROM chapter')->fetch();
+$total = $total_data['total'];
+$numberOfPages =ceil($total/$chapterPerPages);
+
+$actualPage = 0;
+if(isset($_GET['page'])){
+    $actualPage = intval($_GET['page']);
+    if($actualPage>$numberOfPages) {
+        $actualPage = $numberOfPages;
+    }
+}else{
+    $actualPage = 1;
+}
+
+$firstEnter = ($actualPage-1)*$chapterPerPages;
+$response = $db->query('SELECT id, title, content, DATE_FORMAT(created_at ,"%d/%m/%Y à %Hh%imin%ss") AS date FROM chapter ORDER BY date DESC  LIMIT '.$firstEnter.', '.$chapterPerPages);
+?>
+
+<!-- Affichage -->
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -10,8 +33,7 @@
 </head>
 <body>  	
    <header>
-
-   	          <?php	require('nav.php') ?>
+       <?php	require('nav.php') ?>
        <?php require('functions.php') ?>
           <div id="header-photo">
        <img src="https://i.pinimg.com/originals/4e/5d/ad/4e5dad42623fce99caaf8f4e70cdc084.png">
@@ -20,7 +42,7 @@
    </header>
    <div class="container">
  <?php
- require ('connectToDb.php');
+
  if(isset($_GET['id'])) {
      $req = $db->prepare('DELETE FROM chapter WHERE id =?')->execute(array($_GET['id']));
      if ($req) {
@@ -79,23 +101,7 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
     <h1 id="title">Liste des episodes</h1>
    <?php
    //pagination
-   $chapterPerPages = 3;
-   $total_data = $db->query('SELECT COUNT(*)  AS total FROM chapter')->fetch();
-   $total = $total_data['total'];
-   $numberOfPages =ceil($total/$chapterPerPages);
 
-   $actualPage = 0;
-   if(isset($_GET['page'])){
-       $actualPage = intval($_GET['page']);
-       if($actualPage>$numberOfPages) {
-           $actualPage = $numberOfPages;
-       }
-   }else{
-       $actualPage = 1;
-   }
-
-   $firstEnter = ($actualPage-1)*$chapterPerPages;
-     $response = $db->query('SELECT id, title, content, DATE_FORMAT(created_at ,"%d/%m/%Y à %Hh%imin%ss") AS date FROM chapter ORDER BY date DESC  LIMIT '.$firstEnter.', '.$chapterPerPages);
      while ($data = $response->fetch())
    {
    ?>
@@ -127,9 +133,6 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
    </article>
                <?php
            }
-
-
-
    }
 
      ?>
@@ -146,12 +149,8 @@ En 2017, il décide de publier en ligne chapitre par chapitre sur son propre sit
            <?php
            for ($i=1;$i<=$numberOfPages;$i++){
                ?>
-
                <a href="index.php?page=<?php echo $i ?>"><button  class="btn btn-primary "><?php echo $i ?></button> </a>
-
-
                <?php
-
            }
            ?>
    </div>

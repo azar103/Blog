@@ -1,3 +1,34 @@
+<!-- Récupération Des Données -->
+<?php
+require('connectToDb.php');
+$request = $db->prepare('SELECT * FROM chapter WHERE id =? ');
+
+$request->execute(array($_GET['id']));
+$data = $request->fetch();
+if(!empty($_POST)) {
+    $errors = array();
+    if (empty($_POST['title'])) {
+        $errors['title'] = "vous n'avez pas entrez de titre valide";
+    }
+    if (empty($_POST['content'])) {
+        $errors['content'] = "vous n'avez pas entrez de contenu valide";
+    }
+    if(empty($errors)){
+        require('connectToDb.php');
+        if (isset($_POST['title']) && isset($_POST['content'])) {
+            if (!empty($_POST['title']) && !empty($_POST['content'])) {
+                $request = $db->prepare('UPDATE chapter set title = ?, content = ? where id = ?');
+                $request->execute(array($_POST['title'], html_entity_decode($_POST['content']), $_GET['id']));
+                $request->closeCursor();
+                header('location: index.php?actionEdit');
+                exit();
+            }
+        }
+    }
+}
+?>
+
+<!-- Affichage -->
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -14,41 +45,14 @@
         });
     </script>
 </head>
+
 <body>
 <header>
     <?php	require('nav.php') ?>
 </header>
 
 <div class="container" id="addBlock">
-    <?php
-    require('connectToDb.php');
-        $request = $db->prepare('SELECT * FROM chapter WHERE id =? ');
 
-        $request->execute(array($_GET['id']));
-        $data = $request->fetch();
-        if(!empty($_POST)) {
-            $errors = array();
-            if (empty($_POST['title'])) {
-                $errors['title'] = "vous n'avez pas entrez de titre valide";
-            }
-            if (empty($_POST['content'])) {
-                 $errors['content'] = "vous n'avez pas entrez de contenu valide";
-            }
-            if(empty($errors)){
-                require('connectToDb.php');
-                if (isset($_POST['title']) && isset($_POST['content'])) {
-                    if (!empty($_POST['title']) && !empty($_POST['content'])) {
-                        $request = $db->prepare('UPDATE chapter set title = ?, content = ? where id = ?');
-                        $request->execute(array($_POST['title'], html_entity_decode($_POST['content']), $_GET['id']));
-                        $request->closeCursor();
-                        header('location: index.php?actionEdit');
-                        exit();
-                    }
-                }
-            }
-        }
-
-    ?>
     <?php
     if(!empty($errors)){
 
@@ -87,9 +91,6 @@
     </div>
 
 </div>
-
-
-
 
   <?php require('footer.php')?>
 

@@ -1,3 +1,42 @@
+<!-- Récupération Des Données -->
+<?php
+    require('connectToDb.php');
+        if(!empty($_POST)) {
+            $errors = array();
+            if (empty($_POST['title']) ) {
+                $errors['title'] = "vous n'avez pas entrez de titre valide";
+            }else{
+                $request = $db->prepare('SELECT id FROM chapter WHERE title = ?');
+                $request->execute(array($_POST['title']));
+                $chapter = $request->fetch();
+                if($chapter){
+                    $errors['message']="episode existant !";
+                }
+                $request->closeCursor();
+            }
+            if (empty($_POST['content'])) {
+                $errors['content'] = "vous n'avez pas entrez de contenu valide";
+            }
+            if(strlen($_POST['content'])<100){
+                $errors['content'] = "Vous devez rentrer 100 caractéres au moins !";
+            }
+            if(empty($errors)){
+                require('connectToDb.php');
+                if (isset($_POST['title']) && isset($_POST['content'])) {
+                    if (!empty($_POST['title']) && !empty($_POST['content'])) {
+                        $request = $db->prepare('INSERT INTO chapter(title, content, created_at) VALUES (?, ?, NOW())');
+                        $request->execute(array($_POST['title'], html_entity_decode($_POST['content'])));
+                        header('location: index.php');
+                        $request->closeCursor();
+                        exit();
+                    }
+                }
+            }
+        }
+
+    ?>
+
+<!-- Affichage Des Données -->
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -21,42 +60,7 @@
 </header>
 
 <div class="container" id="addBlock">
-    <?php
-    require('connectToDb.php');
-        if(!empty($_POST)) {
-            $errors = array();
-            if (empty($_POST['title']) ) {
-                $errors['title'] = "vous n'avez pas entrez de titre valide";
-            }else{
-                    $request = $db->prepare('SELECT id FROM chapter WHERE title = ?');
-                    $request->execute(array($_POST['title']));
-                    $chapter = $request->fetch();
-                    if($chapter){
-                        $errors['message']="episode existant !";
-                    }
-                    $request->closeCursor();
-            }
-            if (empty($_POST['content'])) {
-                 $errors['content'] = "vous n'avez pas entrez de contenu valide";
-            }
-            if(strlen($_POST['content'])<100){
-                $errors['content'] = "Vous devez rentrer 100 caractéres au moins !";
-            }
-            if(empty($errors)){
-                require('connectToDb.php');
-                if (isset($_POST['title']) && isset($_POST['content'])) {
-                    if (!empty($_POST['title']) && !empty($_POST['content'])) {
-                        $request = $db->prepare('INSERT INTO chapter(title, content, created_at) VALUES (?, ?, NOW())');
-                        $request->execute(array($_POST['title'], html_entity_decode($_POST['content'])));
-                        header('location: index.php');
-                        $request->closeCursor();
-                        exit();
-                    }
-                }
-            }
-        }
 
-    ?>
     <?php
     if(!empty($errors)){
 
