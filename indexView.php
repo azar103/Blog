@@ -1,10 +1,3 @@
-
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 19/11/2018
- * Time: 12:46
- */
 <html>
        <head>
        <title> Authentification</title>
@@ -13,7 +6,6 @@
        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Roboto+Mono" rel="stylesheet">
        </head>
        <body>
-
        <?php require ('nav.php')?>
 
 <div class="container">
@@ -26,7 +18,7 @@
             <div class="alert alert-danger">
                 <?php foreach ($errors as $error){ ?>
                     <ul>
-                        <li><?php echo $error ?></li>
+                        <li><?=  $error ?></li>
                     </ul>
 
                 <?php   } ?>

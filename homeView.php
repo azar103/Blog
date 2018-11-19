@@ -19,16 +19,12 @@
 </header>
 <div class="container">
     <?php
-    if(isset($_GET['id'])) {
-        $req = $db->prepare('DELETE FROM chapter WHERE id =?')->execute(array($_GET['id']));
-        if ($req) {
+        if (isset($_GET['action'])) {
             ?>
             <h2 class="alert alert-info">
                 chapitre supprime!
             </h2>
             <?php
-
-        }
 
     }
     if(isset($_GET['actionEdit'])){
@@ -46,7 +42,6 @@
             Découvrez son dernier roman.</p>
 
 
-
         <p><img id="img-presentation" src="http://bguiriec.fr/projet3/assets/image/jean.jpg">
             Jean Forteroche est né en 1966 sur l'île Adak, en Alaska, et y a passé une partie de son enfance avant de s'installer en France avec sa mère et sa sœur.
             Il a rédigé son premier roman LES NAUFRAGES lors d'un voyage en mer.
@@ -57,12 +52,7 @@
             Porté par son succès, Jean Forteroche est aujourd'hui traduit en dix-huit langues dans plus de soixante pays. Une adaptation cinématographique par une société de production française est en cours.
 
             En 2017, il décide de publier en ligne chapitre par chapitre sur son propre site, son dernier roman BILLET SIMPLE POUR L'ALASKA.</p>
-
-
     </section>
-
-
-
     <div id="main">
         <?php     if (isset($_SESSION['id']) && isset($_SESSION['login'])) { ?>
             <div class="row">
@@ -72,13 +62,10 @@
                 </div>
 
             </div>
-
         <?php }   ?>
         <h1 id="title">Liste des episodes</h1>
         <?php
-        //pagination
-
-        while ($data = $response->fetch())
+        while ($data = $req->fetch())
         {
             ?>
             <article class="row">
@@ -93,7 +80,7 @@
             if (!isset($_SESSION['id']) && !isset($_SESSION['login'])) {
                 ?>
                 <div class="col-xs-12">
-                    <a href="episode.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
+                    <a href="chapter.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
                 </div>
                 </article>
                 <?php
@@ -101,10 +88,10 @@
             } else {
                 ?>
                 <div class="col-xs-12">
-                    <a href="episode.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
+                    <a href="chapter.php?id=<?= $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
 
-                    <a href="editChapter.php?id=<?php echo $data['id'] ?>"> <button class="btn btn-primary">Modifier <i class="fa fa-edit"></i></button></a>
-                    <a href="home.php?action=delete&id=<?php echo $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
+                    <a href="editChapter.php?id=<?= $data['id'] ?>"> <button class="btn btn-primary">Modifier <i class="fa fa-edit"></i></button></a>
+                    <a href="home.php?action=delete&id=<?= $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
                 </div>
                 </article>
                 <?php
@@ -116,7 +103,7 @@
     </div>
 </div>
 <?php
-$response->closeCursor();
+$req->closeCursor();
 ?>
 
 </div>
