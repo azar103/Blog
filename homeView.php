@@ -1,40 +1,39 @@
-<!DOCTYPE html>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-<head>
-    <title>Mon Blog</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Roboto+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-</head>
-<body>
+<?php session_start(); ?>
+<?php $title="homePage" ?>
+<?php ob_start(); ?>
 <header>
-    <?php	require('nav.php') ?>
     <?php require('functions.php') ?>
     <div id="header-photo">
         <img src="https://i.pinimg.com/originals/4e/5d/ad/4e5dad42623fce99caaf8f4e70cdc084.png">
     </div>
-
 </header>
 <div class="container">
     <?php
-        if (isset($_GET['action'])) {
-            ?>
-            <h2 class="alert alert-info">
-                chapitre supprime!
-            </h2>
-            <?php
-
+    if (isset($_GET['delete'])) {
+        ?>
+        <h2 class="alert alert-info">
+            chapitre supprime!
+        </h2>
+        <?php
     }
-    if(isset($_GET['actionEdit'])){
+    if(isset($_GET['edit'])){
         ?>
         <h2 class="alert alert-info">
             chapitre modifie!
         </h2>
         <?php
     }
+
     ?>
+ <?php
+ if(isset($_GET['add'])){
+     ?>
+     <h2 class="alert alert-info">
+         chapitre ajoute!
+     </h2>
+  <?php
+ }
+ ?>
     <section id="presentation">
 
         <h1 id="title">Billet simple pour l'Alaska, roman en ligne</h1>
@@ -58,7 +57,7 @@
             <div class="row">
                 <div class="container">
                     <h1 id="title">Ajouter Un Episode</h1>
-                    <a href="addChapter.php" target="_blank">  <button class="btn btn-primary">Ajouter   <i class="fa fa-plus"></i>  </button></a>
+                    <a href="index.php?action=addChapter" target="_blank">  <button class="btn btn-primary">Ajouter   <i class="fa fa-plus"></i>  </button></a>
                 </div>
 
             </div>
@@ -77,27 +76,26 @@
                 ?>
             </p>
             <?php
+
             if (!isset($_SESSION['id']) && !isset($_SESSION['login'])) {
                 ?>
                 <div class="col-xs-12">
-                    <a href="chapter.php?id=<?php echo $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
+                    <a href="chapter.php?id=<?php echo $data['id'] ?>&action=chapter">  <button class="btn btn-primary">  Lire Les Details >></button></a>
                 </div>
                 </article>
                 <?php
-
             } else {
                 ?>
                 <div class="col-xs-12">
-                    <a href="chapter.php?id=<?= $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
+                    <a href="index.php?action=chapter&id=<?= $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
 
-                    <a href="editChapter.php?id=<?= $data['id'] ?>"> <button class="btn btn-primary">Modifier <i class="fa fa-edit"></i></button></a>
-                    <a href="home.php?action=delete&id=<?= $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
+                    <a href="index.php?action=editChapter&id=<?= $data['id'] ?>"> <button class="btn btn-primary"> Modifier <i class="fa fa-edit"></i></button></a>
+                    <a href="index.php?action=chapters&id=<?= $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
                 </div>
                 </article>
                 <?php
             }
         }
-
         ?>
 
     </div>
@@ -117,9 +115,5 @@ $req->closeCursor();
         }
         ?>
     </div>
-
-
-    <?php require('footer.php')?>
-
-</body>
-</html>
+<?php $content = ob_get_clean();?>
+<?php require ('template.php');?>

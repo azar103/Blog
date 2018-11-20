@@ -1,29 +1,17 @@
-<html>
-       <head>
-       <title> Authentification</title>
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-       <link rel="stylesheet" type="text/css" href="css/style.css">
-       <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Roboto+Mono" rel="stylesheet">
-       </head>
-       <body>
-       <?php require ('nav.php')?>
-
+<?php session_start(); ?>
+<?php $title="Authentification" ?>
+<?php ob_start(); ?>
 <div class="container">
-
     <div class="well">
         <?php
         if(!empty($errors)){
-
             ?>
             <div class="alert alert-danger">
                 <?php foreach ($errors as $error){ ?>
                     <ul>
                         <li><?=  $error ?></li>
                     </ul>
-
                 <?php   } ?>
-
-
             </div>
             <?php
         }
@@ -41,7 +29,5 @@
         </div>
     </div>
 </div>
-<?php require ('footer.php')?>
-
-</body>
-</html>
+<?php $content = ob_get_clean(); ?>
+<?php require ('template.php'); ?>

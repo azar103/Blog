@@ -1,19 +1,11 @@
-<html>
-<head>
-    <title>Episode</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Roboto+Mono" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
-<body>
-<?php require ('nav.php') ?>
-
+<?php session_start(); ?>
+<?php $title="chapterView" ?>
+<?php ob_start();?>
 
 <div class="container">
     <div id="article">
 
-        <?php if (isset($_GET['action'])){
+        <?php if (isset($_GET['signal'])){
             ?>
             <h2 class="alert alert-info">
                 Votre signalement a été pris en compte.
@@ -24,7 +16,7 @@
         ?>
         <h2 class="row"><?= htmlspecialchars($data['title']) ?> <i>Publié le <?= $data['date'] ?></i></h2>
         <div class="container">
-            <p class="content"><?= $data['content'] ?></p><br>
+            <p ><?= $data['content'] ?></p><br>
             <div >
                 <h2>Ecrire un commentaire</h2>
 
@@ -52,12 +44,12 @@
                             <?php
                             if(!isset($_SESSION['id']) && !isset($_SESSION['login'])){ ?>
                                 <p><a id="link_signal"
-                                      href="chapter.php?id=<?= $_GET['id'] ?>&page=<?=$actualPage ?>&action=signal">Signaler</a>
+                                      href="chapter.php?id=<?= $_GET['id'] ?>&page=<?=$actualPage ?>&signal">Signaler</a>
                                 </p>
                                 <?php
                             }else {
                                 ?>
-                                <p><a href="chapter.php?id=<?= $_GET['id'] ?>&page=<?= $actualPage ?>&commentId=<?= $data['id'] ?>"><button class="btn btn-danger">Supprimer</button> </a>
+                                <p><a href="index.php?action=chapter&id=<?= $_GET['id'] ?>&page=<?= $actualPage ?>&commentId=<?= $data['id'] ?>"><button class="btn btn-danger">Supprimer</button> </a>
                                 </p>
                                 <?php
                             }
@@ -91,7 +83,5 @@
         }
         ?>
     </div>
-    <?php require ('footer.php') ?>
-    </body>
-
-    </html>
+<?php $content = ob_get_clean();?>
+<?php require('template.php'); ?>

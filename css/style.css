@@ -234,7 +234,7 @@ form .container .well{
 .content{
     box-sizing: border-box; margin: 0px 0px 10px; color: #333333;
     font-family: timbra_sansregular, Arial, sans-serif;
-    font-size: 25.48px;
+    font-size: 25px;
     text-align: justify; background-color: #f0f2f1;
 }
 /* media query */

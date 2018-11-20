@@ -5,17 +5,7 @@
  * Date: 19/11/2018
  * Time: 17:40
  */
-function dbConnect(){
-    try{
-        $db = new PDO('mysql:host=localhost;dbname=blogdb;charset=utf8','root',''
-        );
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-    catch(Exception $e){
-        die('Erreur  :'.$e->getMessage());
-    }
-    return $db;
-}
+
 function addComment($id, $login, $content){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO comments(chapter_id, login, comment, created_at) VALUES(?,? , ? , NOW() )');
@@ -33,7 +23,6 @@ function getComments($id){
 }
 function getActualPage(){
     $numberOfPages= getNumberOfPagesOfComments(5);
-    $actualPage = 0;
     if(isset($_GET['page'])){
         $actualPage = intval($_GET['page']);
         if($actualPage>$numberOfPages) {
@@ -56,6 +45,7 @@ function getNumberOfPagesOfComments($commentsPerPage){
 function deleteComment($id){
     $db = dbConnect();
     $req= $db->prepare('DELETE FROM comments WHERE id = ?')->execute(array($id));
+
 }
 
 function getChapter($id){
