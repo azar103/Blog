@@ -88,9 +88,8 @@
                 ?>
                 <div class="col-xs-12">
                     <a href="index.php?action=chapter&id=<?= $data['id'] ?>">  <button class="btn btn-primary">  Lire Les Details >></button></a>
-
-                    <a href="index.php?action=editChapter&id=<?= $data['id'] ?>"> <button class="btn btn-primary"> Modifier <i class="fa fa-edit"></i></button></a>
-                    <a href="index.php?action=chapters&id=<?= $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
+                    <a href="index.php?action=editChapter&id=<?= $data['id'] ?>" target="_blank"> <button class="btn btn-primary"> Modifier <i class="fa fa-edit"></i></button></a>
+                    <a href="index.php?action=deleteChapter&id=<?= $data['id'] ?>"> <button class="btn btn-primary">Supprimer <i class="fa fa-trash"></i></button></a>
                 </div>
                 </article>
                 <?php
@@ -108,12 +107,16 @@ $req->closeCursor();
 <div class="text-center">
     <div class="btn-group">
         <?php
-        for ($i=1;$i<=$numberOfPages;$i++){
-            ?>
-            <a href="home.php?page=<?php echo $i ?>"><button class="btn btn-primary "><?php echo $i ?></button> </a>
-            <?php
+           if($total>3){
+            for ($i = 1; $i <= $numberOfPages; $i++) {
+                ?>
+                <a href="home.php?page=<?php echo $i ?>">
+                    <button class="btn btn-primary "><?php echo $i ?></button>
+                </a>
+                <?php
+            }
         }
         ?>
     </div>
 <?php $content = ob_get_clean();?>
-<?php require ('template.php');?>
+<?php require('template.php');?>

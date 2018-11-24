@@ -15,7 +15,7 @@
         </div>
         <?php
     }
-    $data = $req->fetch();
+    $data = $request->fetch();
     ?>
     <form method="POST" action="">
         <div class="row">
@@ -39,4 +39,4 @@
 
 </div>
 <?php $content = ob_get_clean();?>
-<?php require ('template.php'); ?>
+<?php require('view/frontend/template.php'); ?>

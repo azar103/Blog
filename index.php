@@ -1,5 +1,6 @@
 <?php
-require ('controller.php');
+require('controller/frontend/controller.php');
+require('controller/backend/controller.php');
 
 if(isset($_GET['action'])){
     if($_GET['action'] == 'authentification'){
@@ -15,6 +16,10 @@ if(isset($_GET['action'])){
         editChapterForm();
     } else if($_GET['action'] == 'chapters'){
         chapters();
+    } else if($_GET['action'] == 'deleteChapter'){
+         deleteChapterForm();
+    } else if($_GET['action'] == 'deleteComment'){
+        deleteSingleComment();
     }
 }
 else{
